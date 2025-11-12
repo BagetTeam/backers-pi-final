@@ -15,7 +15,7 @@ import sys
 
 
 ENV_FILE = ".env"  # in this folder
-ECSE211_DIR = "/home/pi/ecse211"  # on the brick
+ECSE211_DIR = "/home/pi/master-bakers"  # on the brick
 
 error = lambda text: print(f"\033[91m{text}\033[0m")  # print text in red
 
@@ -39,8 +39,12 @@ def read_password():
     "Read the password from the hidden .env file, or prompt user to enter password if it does not exist."
     if not os.path.exists(ENV_FILE):
         with open(ENV_FILE, "w") as f:
-            f.write('{\n  "password": "ENTER YOUR BRICKPI PASSWORD HERE"\n}\n')  # change the .env file, NOT this line
-        error("Robot password not set in .env file! Please enter it there, save the file, and try again.")
+            f.write(
+                '{\n  "password": "ENTER YOUR BRICKPI PASSWORD HERE"\n}\n'
+            )  # change the .env file, NOT this line
+        error(
+            "Robot password not set in .env file! Please enter it there, save the file, and try again."
+        )
         exit(1)
     with open(ENV_FILE) as f:
         return json.load(f)["password"]
@@ -60,21 +64,28 @@ def copy_project_folder_to_brick():
     """
     project_name = os.path.basename(os.getcwd())
     robot_project_path = f"{ECSE211_DIR}/{project_name}"
-    
+
     if is_windows:
         rm_cmd = f'plink -batch -l pi -pw "{password}" {robot_name} "rm -rf {robot_project_path}"'
         if command_result(rm_cmd):
-            error("Failed to connect to brick or remove old project. Please ensure the brick is turned on and "
-                  "connected to the same network as this computer.")
+            error(
+                "Failed to connect to brick or remove old project. Please ensure the brick is turned on and "
+                "connected to the same network as this computer."
+            )
         else:
             copy_cmd = f'pscp -batch -l pi -pw "{password}" -r {os.getcwd()} pi@{robot_name}:{ECSE211_DIR}'
     else:
-        copy_cmd = f'''sshpass -p "{password}" ssh pi@{robot_name} "rm -rf {robot_project_path
-            }" && sshpass -p "{password}" scp -pr "{os.getcwd()}" pi@{robot_name}:{robot_project_path}'''
+        copy_cmd = f'''sshpass -p "{password}" ssh pi@{robot_name} "rm -rf {
+            robot_project_path
+        }" && sshpass -p "{password}" scp -pr "{os.getcwd()}" pi@{robot_name}:{
+            robot_project_path
+        }'''
     print(f"Copying {project_name} to {robot_name}...")
     if command_result(copy_cmd):
-        error("Failed to copy project to brick. Please ensure it is turned on and connected to "
-              "the same network as this computer.")
+        error(
+            "Failed to copy project to brick. Please ensure it is turned on and connected to "
+            "the same network as this computer."
+        )
 
 
 def run_on_brick(program_path: str, cmd: str):
@@ -82,8 +93,10 @@ def run_on_brick(program_path: str, cmd: str):
     if is_windows:
         run_cmd = f'plink -batch -l pi -pw "{password}" {robot_name} "cd {program_path} && {cmd}"'
     else:
-        run_cmd = f'sshpass -p "{password}" ssh pi@{robot_name} "cd {program_path} && {cmd}"'
-    print(f"Running command on {robot_name}:\n> {run_cmd}".replace(password, 8 * '*'))
+        run_cmd = (
+            f'sshpass -p "{password}" ssh pi@{robot_name} "cd {program_path} && {cmd}"'
+        )
+    print(f"Running command on {robot_name}:\n> {run_cmd}".replace(password, 8 * "*"))
     if command_result(run_cmd):
         error(f"Failed to run `{run_cmd}` command on brick.")
 
@@ -123,6 +136,7 @@ def run_in_background(action: FunctionType) -> FunctionType:
 
 class DeployToRobotGUI:
     "Simple window with robot deployment options."
+
     DELAY_MS = 100  # delay between button updates in milliseconds
     PAD_X, PAD_Y = 20, 5  # padding between window buttons in pixels
 
@@ -130,7 +144,9 @@ class DeployToRobotGUI:
         self.root = root
         root.title("Deploy to robot options")
         self.button_actions: dict[Button, FunctionType] = {
-            Button(root, text="Deploy DPM Project on Robot without running"): copy_project_folder_to_brick,
+            Button(
+                root, text="Deploy DPM Project on Robot without running"
+            ): copy_project_folder_to_brick,
             Button(root, text="Deploy and run DPM Project on Robot"): deploy_and_run,
             Button(root, text="Reset Robot"): reset_brick,
         }
