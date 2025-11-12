@@ -1,5 +1,7 @@
 from utils.brick import EV3GyroSensor, wait_ready_sensors
 
+
+
 class GyroSensor:
     def __init__(self, sensor: EV3GyroSensor):
         wait_ready_sensors()
