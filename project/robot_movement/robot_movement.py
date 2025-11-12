@@ -31,3 +31,7 @@ class RobotMovement:
     def corner_turn_left(self, power: int):
         self.left_motor.set_power(power)
         self.right_motor.set_power(0)
+
+    def adjust_speed(self, left_power: int, right_power: int):
+        self.left_motor.set_power(left_power)
+        self.right_motor.set_power(right_power)
