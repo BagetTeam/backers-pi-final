@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep, time
 import math
 from project.utils.brick import (
     EV3ColorSensor,
