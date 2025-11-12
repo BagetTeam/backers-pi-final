@@ -5,12 +5,15 @@ from project.utils.brick import (
     wait_ready_sensors,
     TouchSensor,
 )
-import robot_movement
+import robot_movement as rbt_mvt
 
 RIGHT_SENSOR = TouchSensor(1)
 LEFT_SENSOR = TouchSensor(2)
 MOTOR1 = Motor("A")
 MOTOR2 = Motor("D")
+
+robot_movement = rbt_mvt.RobotMovement(MOTOR1, MOTOR2)
+
 
 # power const
 FWD_POWER = 50
@@ -24,12 +27,12 @@ def main() :
         # Main loop: runs indefinitely
         while True: 
             while RIGHT_SENSOR.is_pressed():
-                robot_movement.turn_right(MOTOR1, MOTOR2, TURNING_POWER)
+                robot_movement.turn_right(TURNING_POWER)
                 sleep(0.1)
             while LEFT_SENSOR.is_pressed():
-                robot_movement.turn_left(MOTOR1,MOTOR2, TURNING_POWER)
+                robot_movement.turn_left(TURNING_POWER)
                 sleep(0.1)
-            robot_movement.stop_move(MOTOR1,MOTOR2)
+            robot_movement.stop_move()
     except BaseException:
         pass
     finally:
