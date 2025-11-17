@@ -3,17 +3,18 @@ from utils.brick import EV3ColorSensor, wait_ready_sensors
 
 class ColorSensor:
     REFS = {
-        "RED": (1.0, 0.0, 0.0),
-        "GREEN": (0.0, 1.0, 0.0),
-        "BLUE": (0.0, 0.0, 1.0),
-        "YELLOW": (1.0, 1.0, 0.0),
+        "RED": (255.0, 0.0, 0.0),
+        "GREEN": (0.0, 255.0, 0.0),
+        "BLUE": (0.0, 0.0, 255.0),
+        "YELLOW": (255.0, 255.0, 0.0),
         "BLACK": (0.0, 0.0, 0.0),
-        "WHITE": (1.0, 1.0, 1.0)
+        "WHITE": (255.0, 255.0, 255.0)
     } # temporary
 
     def __init__(self, sensor: EV3ColorSensor):
         self.sensor = sensor
         self.current_color = "UNKNOWN"
+        self.NORM_REFS = {name: self.__normalize_rgb(rgb) for name, rgb in ColorSensor.REFS.items()}
         
     def get_rgb(self) -> list[float]:
         return self.sensor.get_rgb()
