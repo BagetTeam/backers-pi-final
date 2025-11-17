@@ -1,6 +1,6 @@
 from time import sleep
 from utils.brick import EV3ColorSensor,configure_ports, reset_brick, wait_ready_sensors, TouchSensor
-from color_sensor import ColorSensor
+from color_sensor.color_sensor import ColorSensor
 
 DELAY_SEC = 0.01  # seconds of delay between measurements
 DATA_FILE_BASE_PATH = "../data_analysis/color_data/"
@@ -19,6 +19,7 @@ def main():
     color_sensor = ColorSensor(COLOR_SENSOR)
     try:
         for color in ColorSensor.REFS.keys():
+            print("COLOR:", color)
             collect_color_sensor_data(color, color_sensor)
     except BaseException:  # capture all exceptions including KeyboardInterrupt (Ctrl-C)
         pass
@@ -33,22 +34,25 @@ def collect_color_sensor_data(color: str, color_sensor: ColorSensor):
     
     while True:
         if TOUCH_SENSOR2.is_pressed():
+            print("GOING TO NEXT COLOR BUTTON PRESS")
             while TOUCH_SENSOR2.is_pressed():
                 sleep(DELAY_SEC)
+            print("GOING TO NEXT COLOR")
             break
         if TOUCH_SENSOR.is_pressed():
             print(f"Touch sensor pressed, collecting rgb data for {color}...")
             while TOUCH_SENSOR.is_pressed():
                 r, g, b = color_sensor.get_rgb()
                 if color_sensor.filter_data(r, g, b): # If None is given, then data collection failed that time
+                    print(r, g, b)
                     output.append(f"{r}, {g}, {b}")
                 sleep(DELAY_SEC)
             print("Touch sensor released, stopping data collection.")
             
-
+    print("Writing to fie")
     with open(file_output, "w") as file:
         file.write("\n".join(output))
-
+    print("WRITEN TO FILE")
     
 
 if __name__ == "__main__":
