@@ -24,7 +24,7 @@ class ColorSensor:
         total = sum(rgb)
         if total == 0:
             return (0.0, 0.0, 0.0)
-        return (value / total for value in rgb)
+        return tuple(value / total for value in rgb)
     
     def __filter_data(self, r, g, b):
         if r is not None and g is not None and b is not None:
@@ -39,7 +39,7 @@ class ColorSensor:
         r, g, b = self.__normalize_rgb(rgb)
         color_found = "UNKNOWN"
         closest_dist = math.inf
-        for name, (rr, gg, bb) in ColorSensor.REFS.items():
+        for name, (rr, gg, bb) in self.NORM_REFS.items():
             dist = math.sqrt((r - rr) ** 2 + (g - gg) ** 2 + (b - bb) ** 2)
             if dist < closest_dist:
                 closest_dist = dist
