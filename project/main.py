@@ -2,7 +2,6 @@ from utils.brick import (
     Motor,
     TouchSensor,
     reset_brick,
-    wait_ready_sensors,
     configure_ports,
 )
 from robot_movement import robot_movement_test as robot_move_test

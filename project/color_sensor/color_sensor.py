@@ -16,7 +16,6 @@ class ColorSensor:
         wait_ready_sensors()
         self.sensor = sensor
         
-
     def get_rgb(self) -> list[float]:
         return self.sensor.get_rgb()
     
@@ -60,8 +59,3 @@ class ColorSensor:
             return blue > red + threshold and blue > green + threshold
         else:
             return False
-        
-    
-    
-
-    
