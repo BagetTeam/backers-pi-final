@@ -1,4 +1,4 @@
-from linetracker import LineTracker
+from linetracking_system.linetracker import LineTracker
 
 class LineTrackingTest:
     def __init__(self, linetracking: LineTracker):
