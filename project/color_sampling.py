@@ -48,6 +48,9 @@ def collect_color_sensor_data(color: str, color_sensor: ColorSensor):
                 sleep(DELAY_SEC)
             print("Touch sensor released, stopping data collection.")
 
+    while ANOTHER_TOUCHE.is_pressed():
+        sleep(DELAY_SEC)
+
     with open(file_output, "w") as file:
         file.write("\n".join(output))
 
