@@ -46,3 +46,5 @@ class DeliverySystem:
         self.delivery_motor.set_position_relative(angle)
         self.delivery_motor.wait_is_stopped()
         self.has_first_been_pushed = True
+
+        self.movement.change_relative_angle(0, 20)
