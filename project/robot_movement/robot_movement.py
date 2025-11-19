@@ -12,6 +12,9 @@ class RobotMovement:
         self.left_motor = left_motor
         self.right_motor = right_motor
 
+        self.right_motor.reset_encoder()
+        self.left_motor.reset_encoder()
+
     def set_limits(self, power: int = 0, dps: int = 0):
         self.left_motor.set_limits(power, dps)
         self.right_motor.set_limits(power, dps)
@@ -45,11 +48,12 @@ class RobotMovement:
         self.right_motor.set_power(right_power)
 
     def change_relative_angle(self, angleLeft: int, angleRight: int):
-        self.left_motor.set_position_relative(angleLeft)
-        self.right_motor.set_position_relative(angleRight)
+        if angleLeft != 0:
+            self.left_motor.set_position_relative(angleLeft)
+        if angleRight != 0:
+            self.right_motor.set_position_relative(angleRight)
 
     def is_robot_motor_moving(self) -> bool:
         return (self.left_motor.is_moving() or False) or (
             self.right_motor.is_moving() or False
         )
-

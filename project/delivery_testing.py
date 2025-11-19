@@ -11,19 +11,16 @@ sensor = EV3ColorSensor(3)
 wait_ready_sensors(True)
 
 color_sensor = ColorSensor(sensor)
-robot_movement = RobotMovement(left_motor, right_motor)
-delivery_system = DeliverySystem(motor, color_sensor, robot_movement)
+delivery_system = DeliverySystem(motor, color_sensor, right_motor)
 
 
 def main():
     try:
         delivery_system.deliver()
-    except BaseException:
-        print("exception")
-        pass
     finally:
         color_sensor.dispose()
         reset_brick()
+        exit()
 
 
 if __name__ == "__main__":
