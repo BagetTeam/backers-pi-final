@@ -43,7 +43,7 @@ class ColorSensor:
 
     def main(self):
         while self.thread_run:
-            _color = self.detect_color()
+            _color = self.__detect_color()
             # print(color)
 
     def get_rgb(self) -> tuple[float, float, float]:
@@ -89,7 +89,7 @@ class ColorSensor:
                 color_found = name
         return color_found
 
-    def detect_color(self):
+    def __detect_color(self):
         r, g, b = self.get_rgb()
         # print(r, g, b)
         if not self.filter_data(r, g, b):

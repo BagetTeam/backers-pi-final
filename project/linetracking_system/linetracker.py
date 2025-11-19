@@ -30,7 +30,7 @@ class LineTracker(RobotMovement):
 
         previous_color = -1
         while True:
-            color = self.color_sensor.detect_color()
+            color = self.color_sensor.get_current_color()
             if color == "BLACK":
                 self.adjust_speed(0, 0)
                 self.change_relative_angle(correction_factor, -correction_factor)
