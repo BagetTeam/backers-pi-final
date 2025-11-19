@@ -5,4 +5,4 @@ class LineTrackingTest:
         self.linetracking = linetracking
     
     def test(self, base_power, correction_factor):
-        self.linetracking.follow_line(base_power=base_power, correction_factor=correction_factor)
+        self.linetracking.follow_line3(base_power=base_power, correction_factor=correction_factor)
