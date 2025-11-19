@@ -1,4 +1,5 @@
 from color_sensor.color_sensor import ColorSensor
+from robot_movement.robot_movement import RobotMovement
 from utils.brick import (
     Motor,
     TouchSensor,
@@ -12,17 +13,17 @@ from linetracking_system import linetracker, test_linetracker
 
 TOUCH1 = TouchSensor(1)
 COLOR = EV3ColorSensor(3)
-MOTOR1 = Motor("A")
-MOTOR2 = Motor("D")
+MOTOR_LEFT = Motor("A")
+MOTOR_RIGHT = Motor("D")
 wait_ready_sensors(True)
 
 COLOR_SENSOR = ColorSensor(COLOR)
+ROBOT_MOVEMENT = RobotMovement(MOTOR_LEFT, MOTOR_RIGHT)
 
 
 def main():
     # movement_test = robot_move_test.MovementTest(TOUCH1, TOUCH2, MOTOR1, MOTOR2)
-    line_tracker = linetracker.LineTracker(MOTOR1, MOTOR2, COLOR_SENSOR)
-    line_tracker_test = test_linetracker.LineTrackingTest(line_tracker)
+    line_tracker_test = test_linetracker.LineTrackingTest(ROBOT_MOVEMENT, COLOR_SENSOR)
     try:
         line_tracker_test.test(10, 10)
         # movement_test.corner_turning_test(TURNING_POWER=25)
