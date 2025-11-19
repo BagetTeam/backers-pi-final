@@ -15,8 +15,8 @@ class LineTracker(RobotMovement):
     def follow_line3(
         self,
         base_power: int = 30,
-        correction_factor: int = 10,
-        alpha: float = 1.0,
+        correction_factor: int = 20,
+        alpha: float = 5.0,
         threshold: float = 0.3,
         threshold_black: float = 0.6,
     ):
