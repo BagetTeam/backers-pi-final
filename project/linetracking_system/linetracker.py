@@ -67,7 +67,7 @@ class LineTracker(RobotMovement):
             # Note: get_rgb_detected returns (rgb, white, black)
             # We use a throwaway variable for the refs since we cached them above, 
             # or we could just use get_rgb() if available. 
-            rgb, _, _ = self.color_sensor.get_rgb_detected()
+            rgb, _, _ = self.color_sensor.get_rgb()
             
             dist_to_black = euclidean_distance(rgb, black_ref)
             dist_to_white = euclidean_distance(rgb, white_ref)
