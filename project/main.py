@@ -5,11 +5,11 @@ from utils.brick import (
     TouchSensor,
     EV3ColorSensor,
     reset_brick,
-    configure_ports,
     wait_ready_sensors,
 )
 from robot_movement import robot_movement_test as robot_move_test
-from linetracking_system import linetracker, test_linetracker
+from linetracking_system import test_linetracker
+import sys
 
 TOUCH1 = TouchSensor(1)
 COLOR = EV3ColorSensor(3)
@@ -21,7 +21,7 @@ COLOR_SENSOR = ColorSensor(COLOR)
 ROBOT_MOVEMENT = RobotMovement(MOTOR_LEFT, MOTOR_RIGHT)
 
 
-def main():
+def main(test: str = ""):
     # movement_test = robot_move_test.MovementTest(TOUCH1, TOUCH2, MOTOR1, MOTOR2)
     line_tracker_test = test_linetracker.LineTrackingTest(ROBOT_MOVEMENT, COLOR_SENSOR)
     try:
@@ -37,4 +37,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1:
+        print("Arguments provided:", sys.argv[1:])
+        main(sys.argv[1])
+    else:
+        print("Provide test: [line, delivery]")
