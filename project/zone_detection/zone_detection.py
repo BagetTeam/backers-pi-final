@@ -46,7 +46,6 @@ class ZoneDetection:
                 self.movement.change_relative_angle(-90, 90)
                 sleep(1)
                 self.movement.move_straight(MOTOR_POWER)
-                exit(1)
 
             elif color == "RED":
                 self.movement.stop_move()

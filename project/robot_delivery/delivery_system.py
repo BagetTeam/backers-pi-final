@@ -20,6 +20,7 @@ class DeliverySystem:
         print("initializing delivery system")
 
         self.delivery_motor = motor
+        self.delivery_motor.set_limits(30)
         self.right_motor = right_motor
         self.sensor = sensor
         self.sound = sound
@@ -34,7 +35,7 @@ class DeliverySystem:
         self.sound.wait_done()
 
         # self.move_back()
-        # self.push()
+        self.push()
         # self.right_motor.wait_is_stopped()
 
     def move_back(self, power: int = 50, duration: float = 0):
@@ -46,7 +47,10 @@ class DeliverySystem:
     # piston-like delivery system
     def push(self, power: int = 50, duration: float = 0.5):
         print("pushing thing")
-        angle = 360 if self.has_first_been_pushed else 180
-        self.delivery_motor.set_position_relative(angle)
-        self.delivery_motor.wait_is_stopped()
+        if self.has_first_been_pushed:
+            self.delivery_motor.set_position(0)
+            sleep(2)
+
+        self.delivery_motor.set_position(135)
+        sleep(2)
         self.has_first_been_pushed = True
