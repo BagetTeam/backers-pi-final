@@ -1,62 +1,94 @@
 import math
-from utils.brick import EV3ColorSensor, wait_ready_sensors
+from threading import Thread
+from typing import Union
+from utils.brick import EV3ColorSensor
+
 
 class ColorSensor:
-    REFS = {
-        "RED": (255.0, 0.0, 0.0),
-        "GREEN": (0.0, 255.0, 0.0),
-        "BLUE": (0.0, 0.0, 255.0),
-        "YELLOW": (255.0, 255.0, 0.0),
-        "BLACK": (0.0, 0.0, 0.0),
-        "WHITE": (255.0, 255.0, 255.0)
-    } # temporary
+    sensor: EV3ColorSensor
+    current_color: str
+    cache: dict[str, tuple[float, float, float]] = {}
+    thread: Thread
+    thread_run: bool = True
 
     def __init__(self, sensor: EV3ColorSensor):
         self.sensor = sensor
         self.current_color = "UNKNOWN"
-        self.NORM_REFS = {name: self.__normalize_rgb(rgb) for name, rgb in ColorSensor.REFS.items()}
-        
+        self.init_cache()
+
+        self.thread = Thread(target=self.main, args=[])
+        self.thread.start()
+
+    def init_cache(self):
+        colors = ["red", "green", "blue", "yellow", "black", "white", "orange"]
+
+        for color in colors:
+            with open(f"../data_analysis/color_data/{color}.txt") as file:
+                r_sum, g_sum, b_sum = 0, 0, 0
+
+                rows = file.readlines()
+                n = len(rows)
+                for row in rows:
+                    r, g, b = row.split(", ")
+                    r_sum += int(r)
+                    g_sum += int(g)
+                    b_sum += int(b)
+
+                self.cache[color.upper()] = self.__normalize_rgb(
+                    (r_sum / n, g_sum / n, b_sum / n)
+                )
+
+    def main(self):
+        while self.thread_run:
+            _ = self.get_color_detected()
+
     def get_rgb(self) -> list[float]:
         return self.sensor.get_rgb()
 
-    
-    def __normalize_rgb(self, rgb: tuple[float]) -> tuple[float]:
+    def __normalize_rgb(
+        self, rgb: tuple[float, float, float]
+    ) -> tuple[float, float, float]:
         total = sum(rgb)
         if total == 0:
             return (0.0, 0.0, 0.0)
-        return tuple(value / total for value in rgb)
-    
-    def __filter_data(self, r, g, b):
+        return rgb[0] / total, rgb[1] / total, rgb[2] / total
+
+    def filter_data(
+        self, r: Union[float, None], g: Union[float, None], b: Union[float, None]
+    ):
         if r is not None and g is not None and b is not None:
             if r > 0 and g > 0 and b > 0:
                 return True
         return False
 
-    def __handle_threshold(self, color):
+    def __handle_threshold(self, color: str):
         return color
 
-    def classify_color(self, rgb) -> str:
+    def classify_color(self, rgb: tuple[float, float, float]) -> str:
         r, g, b = self.__normalize_rgb(rgb)
         color_found = "UNKNOWN"
         closest_dist = math.inf
-        for name, (rr, gg, bb) in self.NORM_REFS.items():
+        for name, (rr, gg, bb) in self.cache.items():
             dist = math.sqrt((r - rr) ** 2 + (g - gg) ** 2 + (b - bb) ** 2)
             if dist < closest_dist:
                 closest_dist = dist
                 color_found = name
         return color_found
-    
+
     def get_color_detected(self):
-        rgb = self.get_rgb()
-        print(rgb)
-        if not self.__filter_data(*rgb):
+        r, g, b = self.get_rgb()
+        print(r, g, b)
+        if not self.filter_data(r, g, b):
             return "UNKNOWN"
         print("HAS BEEN FILTERED")
-        color_found = self.classify_color(rgb)
+        color_found = self.classify_color((r, g, b))
         print(color_found)
         color_found = self.__handle_threshold(color_found)
         # extra things
 
-        
         self.current_color = color_found
         return color_found
+
+    def dispose(self):
+        self.thread_run = False
+        self.thread.join()
