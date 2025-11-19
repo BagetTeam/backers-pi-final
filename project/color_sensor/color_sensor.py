@@ -35,7 +35,7 @@ class ColorSensor:
                     b_sum += int(b)
 
                 self.cache[color.upper()] = self.__normalize_rgb(
-                    (r_sum / n, g_sum / n, g_sum / n)
+                    (r_sum / n, g_sum / n, b_sum / n)
                 )
 
     def main(self):
