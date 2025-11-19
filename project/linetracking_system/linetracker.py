@@ -4,13 +4,15 @@ from color_sensor.color_sensor import ColorSensor
 from time import sleep
 
 
-class LineTracker(RobotMovement):
+class LineTracker():
+    robot_movement: RobotMovement
+    color_sensor: ColorSensor
+
     def __init__(
-        self, left_motor: Motor, right_motor: Motor, color_sensor: ColorSensor
+        self, robot_movement: RobotMovement, color_sensor: ColorSensor
     ):
-        super().__init__(left_motor, right_motor)
+        self.robot_movement = robot_movement
         self.color_sensor = color_sensor
-        self.isLeft = False
 
     def follow_line3(
         self,
