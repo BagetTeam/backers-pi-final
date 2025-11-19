@@ -43,7 +43,7 @@ class ColorSensor:
 
     def main(self):
         while self.thread_run:
-            _color = self.detect_color()
+            _color = self.__detect_color()
             # print(color)
 
     def get_rgb(self) -> tuple[float, float, float]:
@@ -69,19 +69,27 @@ class ColorSensor:
 
     def __handle_threshold(self, color: str):
         return color
-
+    
+    def get_distance(self, rgb: tuple[float, float, float], target_color: str):
+        if target_color not in self.cache:
+            return -1
+        (rr, gg, bb) = self.cache.get(target_color)
+        r, g, b = rgb
+        dist = math.sqrt((r - rr) ** 2 + (g - gg) ** 2 + (b - bb) ** 2)
+        return dist
+    
     def classify_color(self, rgb: tuple[float, float, float]) -> str:
         r, g, b = self.__normalize_rgb(rgb)
         color_found = "UNKNOWN"
         closest_dist = math.inf
-        for name, (rr, gg, bb) in self.cache.items():
-            dist = math.sqrt((r - rr) ** 2 + (g - gg) ** 2 + (b - bb) ** 2)
+        for name in self.cache.keys():
+            dist = self.get_distance(rgb, name)
             if dist < closest_dist:
                 closest_dist = dist
                 color_found = name
         return color_found
 
-    def detect_color(self):
+    def __detect_color(self):
         r, g, b = self.get_rgb()
         # print(r, g, b)
         if not self.filter_data(r, g, b):

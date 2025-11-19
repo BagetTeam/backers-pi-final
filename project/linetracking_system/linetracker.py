@@ -12,7 +12,7 @@ class LineTracker(RobotMovement):
         self.color_sensor = color_sensor
         self.isLeft = False
 
-    def follow_line(self, base_power: int = 30, correction_factor: float = 10.0):
+    def follow_line(self, base_power: int = 30, correction_factor: int = 10):
         """
         Adjusts motor speeds based on sensor reading to follow a line.
 
@@ -30,7 +30,7 @@ class LineTracker(RobotMovement):
 
         previous_color = -1
         while True:
-            color = self.color_sensor.detect_color()
+            color = self.color_sensor.get_current_color()
             if color == "BLACK":
                 self.adjust_speed(0, 0)
                 self.change_relative_angle(correction_factor, -correction_factor)
