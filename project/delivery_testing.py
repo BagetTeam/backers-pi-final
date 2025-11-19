@@ -17,6 +17,9 @@ delivery_system = DeliverySystem(motor, color_sensor, right_motor)
 def main():
     try:
         delivery_system.deliver()
+    except BaseException:
+        print("WHYYYYYYYYY")
+        pass
     finally:
         color_sensor.dispose()
         reset_brick()
