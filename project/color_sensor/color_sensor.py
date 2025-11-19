@@ -19,6 +19,7 @@ class ColorSensor:
 
         self.thread = Thread(target=self.main, args=[])
         self.thread.start()
+        self.current_rgb: tuple[float, float, float]
 
     def init_cache(self):
         colors = ["red", "green", "blue", "yellow", "black", "white", "orange"]
@@ -43,11 +44,14 @@ class ColorSensor:
 
     def main(self):
         while self.thread_run:
-            _color = self.__detect_color()
-            # print(color)
+            _ = self.__detect_color()
 
     def get_rgb(self) -> tuple[float, float, float]:
-        r, g, b = self.sensor.get_rgb()
+        r, g, b = self.current_rgb
+    
+    def __set_rgb_color(self, rgb, color):
+        self.current_color = rgb
+        self.current_color = color
         self.sensor.wait_ready()
         return r, g, b
 
@@ -91,20 +95,21 @@ class ColorSensor:
 
     def __detect_color(self):
         r, g, b = self.get_rgb()
-        # print(r, g, b)
         if not self.filter_data(r, g, b):
+            self.__set_rgb_color((r, g, b), "UNKNOWN")
             return "UNKNOWN"
-        # print("HAS BEEN FILTERED")
         color_found = self.classify_color((r, g, b))
-        # print(color_found)
         color_found = self.__handle_threshold(color_found)
         # extra things
 
-        self.current_color = color_found
+        self.__set_rgb_color((r, g, b), color_found)
         return color_found
 
-    def get_current_color(self):
+    def get_current_color(self) -> str:
         return self.current_color
+    
+    def get_current_rgb(self) -> list[float]:
+        return self.current_rgb
 
     def dispose(self):
         print("disposing color sensor")
