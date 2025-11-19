@@ -38,6 +38,7 @@ def main(test: str = ""):
             delivery_system = DeliverySystem(MOTOR_DELIVERY, COLOR_SENSOR, MOTOR_RIGHT, SOUND)
             zone_detection = ZoneDetection(COLOR_SENSOR, delivery_system, ROBOT_MOVEMENT)
             zone_detection.detect_zones()
+            # delivery_system.deliver()
         elif test == "mvt":   
             movement_test = robot_move_test.MovementTest(TOUCH1, TOUCH2, MOTOR_LEFT, MOTOR_RIGHT)
             movement_test.corner_turning_test(TURNING_POWER=25)
