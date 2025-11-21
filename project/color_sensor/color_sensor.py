@@ -54,8 +54,8 @@ class ColorSensor:
         self.sensor.wait_ready()
         return r, g, b
 
-    def __set_rgb_color(self, rgb, color):
-        self.current_color = rgb
+    def __set_rgb_color(self, rgb: tuple[float, float, float], color: str):
+        self.current_rgb = rgb
         self.current_color = color
 
     def __normalize_rgb(
