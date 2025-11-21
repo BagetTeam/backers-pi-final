@@ -11,4 +11,4 @@ class LineTrackingTest:
         # self.linetracking.follow_line3(
         #     base_power=base_power, correction_factor=correction_factor
         # )
-        self.linetracking.follow_line2()
+        self.linetracking.follow_line()

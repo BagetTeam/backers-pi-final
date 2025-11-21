@@ -27,7 +27,7 @@ class LineTracker:
         self.gyro = gyro
         self.zone_detection = zone_detection
 
-    def follow_line2(self):
+    def follow_line(self):
         R_POWER = 30
         L_POWER = 15
 
@@ -38,7 +38,6 @@ class LineTracker:
             color = self.color_sensor.get_current_color()
 
             if color == "ORANGE":
-                self.robot_movement.adjust_speed(0, 0)
                 self.zone_detection.detect_zone()
 
             ratio = self.get_ratio(rgb)

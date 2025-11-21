@@ -38,6 +38,7 @@ class ZoneDetection:
 
     def detect_zone(self):
         if self.enabled:
+            self.movement.adjust_speed(0, 0)
             self.discover_color()
             self.enabled = False
 
@@ -80,10 +81,10 @@ class ZoneDetection:
     def __move_around(self):
         self.movement.set_limits(20)
         sleep(0.5)
-        self.movement.change_relative_angle(0, 90)
-        sleep(1)
-        self.movement.change_relative_angle(70, 0)
-        sleep(1)
+        self.movement.turn_specific_with_angle(20, 0, 20)
+        sleep(0.1)
+        self.movement.turn_specific_with_angle(20, 20, 0)
+        sleep(0.1)
 
         if self.has_found_red:
             return
