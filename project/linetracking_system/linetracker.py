@@ -28,7 +28,7 @@ class LineTracker:
         self.zone_detection = zone_detection
 
     def follow_line(self):
-        R_POWER = 30
+        R_POWER = 25
         L_POWER = 15
 
         self.robot_movement.adjust_speed(L_POWER, R_POWER)
@@ -37,7 +37,7 @@ class LineTracker:
             rgb = self.color_sensor.get_current_rgb()
             color = self.color_sensor.get_current_color()
 
-            if color == "ORANGE":
+            if color == "ORANGE" or color == "RED":
                 self.zone_detection.detect_zone()
 
             ratio = self.get_ratio(rgb)
@@ -50,7 +50,7 @@ class LineTracker:
                 self.turn_count += 1
                 print(self.turn_count)
 
-                if self.turn_count % 4 != 3:
+                if self.turn_count % 3 != 2:
                     self.turn_right()
                     sleep(0.1)
                     self.robot_movement.adjust_speed(L_POWER, R_POWER)
