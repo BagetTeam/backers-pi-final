@@ -16,6 +16,8 @@ MOTOR1 = Motor("A")
 MOTOR2 = Motor("D")
 wait_ready_sensors(True)
 
+GYRO.set_mode("abs")
+
 COLOR_SENSOR = ColorSensor(COLOR)
 line_tracker = linetracker.LineTracker(MOTOR1, MOTOR2, COLOR_SENSOR, GYRO)
 line_tracker_test = test_linetracker.LineTrackingTest(line_tracker)

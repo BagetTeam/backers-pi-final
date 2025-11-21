@@ -83,6 +83,7 @@ class LineTracker(RobotMovement):
 
             if ratio > 0.8:
                 self.turn_right()
+                raise Exception()
 
             sleep(0.01)
 
@@ -99,9 +100,16 @@ class LineTracker(RobotMovement):
         return diff / dist_diff
 
     def turn_right(self):
+        current_angle = self.gyro.get_abs_measure()
+        delta = 0
+
         self.right_motor.set_power(-5)
         self.left_motor.set_power(30)
-        sleep(2)
+
+        while delta < 90:
+            print("right", self.gyro.get_abs_measure(), current_angle)
+            delta = abs(self.gyro.get_abs_measure() - current_angle)
+            sleep(0.01)
 
         if self.color_sensor.get_current_color() == "ORANGE":
             pass
