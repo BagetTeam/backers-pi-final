@@ -90,7 +90,7 @@ class LineTracker:
 
             if ratio > 0.8:
                 self.turn_right()
-                raise Exception()
+                self.robot_movement.adjust_speed(L_POWER, R_POWER)
 
             sleep(0.01)
 
@@ -107,18 +107,5 @@ class LineTracker:
         return diff / dist_diff
 
     def turn_right(self):
-        current_angle = self.gyro.get_abs_measure()
-        delta = 0
-
-        self.right_motor.set_power(-5)
-        self.left_motor.set_power(30)
-
-        while delta < 90:
-            print("right", self.gyro.get_abs_measure(), current_angle)
-            delta = abs(self.gyro.get_abs_measure() - current_angle)
-            sleep(0.01)
-
+        self.robot_movement.intersection_turn_right()
         self.zone_detection.detect_zone()
-
-        self.right_motor.set_power(20)
-        self.left_motor.set_power(10)

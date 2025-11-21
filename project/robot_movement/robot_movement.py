@@ -41,16 +41,16 @@ class RobotMovement:
         self.adjust_speed(30, -5)
         while self.gyro_sensor.get_angle() < 90:
             sleep(0.01)
-        self.adjust_speed(self.BASE_L_POWER, self.BASE_R_POWER)
+        self.adjust_speed(0, 0)
 
     def intersection_turn_left(self):
         self.gyro_sensor.set_reference(self.gyro_sensor.get_angle())
         self.adjust_speed(-5, 30)
         while self.gyro_sensor.get_angle() > -90:
             sleep(0.01)
-        self.adjust_speed(self.BASE_L_POWER, self.BASE_R_POWER)
+        self.adjust_speed(0, 0)
 
-    def adjust_left_speed(self, left_power: int):
+    def adjust_left_speed(self, left_power: float):
         self.left_motor.set_power(left_power)
 
     def adjust_speed(self, left_power: int, right_power: int):
