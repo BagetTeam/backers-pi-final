@@ -57,6 +57,7 @@ class PackageDiscovery:
         self.robot_movement.adjust_speed(-BASE_L, -BASE_R)
         while self.color_sensor.get_current_color() != "ORANGE":
             sleep(0.01)
+        self.robot_movement.a_bit_forward()
         self.robot_movement.adjust_speed(0, 0)
 
     def look_sides(self, left_power: float, right_power: float, angle: float) -> bool:
