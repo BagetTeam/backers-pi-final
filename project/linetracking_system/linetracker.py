@@ -102,5 +102,9 @@ class LineTracker(RobotMovement):
         self.right_motor.set_power(-5)
         self.left_motor.set_power(30)
         sleep(2)
+
+        if self.color_sensor.get_current_color() == "ORANGE":
+            pass
+
         self.right_motor.set_power(20)
         self.left_motor.set_power(10)
