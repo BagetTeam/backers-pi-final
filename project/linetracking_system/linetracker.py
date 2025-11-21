@@ -82,7 +82,6 @@ class LineTracker:
             rgb = self.color_sensor.get_current_rgb()
 
             ratio = self.get_ratio(rgb)
-            print(ratio)
 
             self.robot_movement.adjust_left_speed(
                 L_POWER + (L_POWER / 2) * ratio / 0.20
