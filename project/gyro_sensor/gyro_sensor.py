@@ -1,4 +1,6 @@
+from typing import Union
 from utils.brick import EV3GyroSensor
+
 
 class GyroSensor:
     sensor: EV3GyroSensor
@@ -11,12 +13,12 @@ class GyroSensor:
 
     def get_angle(self) -> float:
         return self.sensor.get_abs_measure() - self.reference
-    
-    def set_reference(self):
-        self.reference = self.sensor.get_abs_measure()
 
-    def set_reference(self, reference: float):
-        self.reference = reference
-        
+    def set_reference(self, reference: Union[float, None] = None):
+        if reference is None:
+            self.reference = self.sensor.get_abs_measure()
+        else:
+            self.reference = reference
+
     def get_reference(self):
         return self.reference

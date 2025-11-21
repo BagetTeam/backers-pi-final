@@ -17,7 +17,6 @@ class ZoneDetection:
     has_found_red: bool = False
     stop: bool = False
     package_discorvery: PackageDiscovery
-    t: Thread
     run_thread: bool = True
     is_discovering: bool = False
 
@@ -33,14 +32,10 @@ class ZoneDetection:
         self.movement = movement
         self.package_discorvery = package_discovery
 
-        self.t = Thread(target=self.detect_zone)
-        self.t.start()
-
     def detect_zone(self):
-        if self.enabled:
-            self.movement.adjust_speed(0, 0)
-            self.discover_color()
-            self.enabled = False
+        self.movement.adjust_speed(0, 0)
+        self.discover_color()
+        self.enabled = False
 
     def discover_color(self):
         print("discovering")
@@ -71,12 +66,12 @@ class ZoneDetection:
     def __backtrack(self):
         self.movement.set_limits(20)
         sleep(0.5)
-        self.movement.change_relative_angle(-40, -50)
+        self.movement.change_relative_angle(-50, -50)
         sleep(0.5)
         self.movement.set_limits(0)
         sleep(0.5)
 
-        self.movement.turn_with_angle(-180, 30)
+        self.movement.turn_specific_with_angle(180, -25, 30)
 
     def __move_around(self):
         self.movement.set_limits(20)
@@ -100,8 +95,3 @@ class ZoneDetection:
         self.movement.turn_with_angle(-30)
 
         self.stop = True
-
-    def dispose(self):
-        print("disposing zone detection")
-        self.run_thread = False
-        self.t.join()
