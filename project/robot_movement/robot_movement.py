@@ -54,7 +54,7 @@ class RobotMovement:
         isRight = 1 if angle > 0 else -1
         self.gyro_sensor.set_reference()
         self.adjust_speed(isRight * base_speed, -isRight * base_speed)
-        while self.gyro_sensor.get_angle() > isRight * 90:
+        while self.gyro_sensor.get_angle() > isRight * angle:
             sleep(0.01)
         self.adjust_speed(0, 0)
         

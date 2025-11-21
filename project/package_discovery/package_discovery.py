@@ -1,22 +1,56 @@
+from time import sleep
 from color_sensor.color_sensor import ColorSensor
+from gyro_sensor.gyro_sensor import GyroSensor
 from robot_movement.robot_movement import RobotMovement
 
 class PackageDiscovery:
     color_sensor: ColorSensor
     robot_movement: RobotMovement
+    gyro_sensor: GyroSensor
 
-    def __init__(self, color_sensor: ColorSensor, robot_movement: RobotMovement):
+    def __init__(self, gyro_sensor: GyroSensor, color_sensor: ColorSensor, robot_movement: RobotMovement):
         self.color_sensor = color_sensor
         self.robot_movement = robot_movement
+        self.gyro_sensor = gyro_sensor
 
     def explore_room(self):
         BASE_L = 20
         BASE_R = 20
 
-        for advances in range(5):
+        package_found = False
+        advances = 0
+        self.gyro_sensor.set_reference()
+        while not package_found and advances < 5:
+            advances += 1
+            # Check left
             self.robot_movement.adjust_speed(0, BASE_R)
+            while self.gyro_sensor.get_angle() > -70:
+                if self.color_sensor.get_current_color == "GREEN":
+                    package_found = True
+                    print("PACKAGE FOUUND")
+                    break
+            self.robot_movement.adjust_speed(0, -BASE_R)
+            while self.gyro_sensor.get_angle() < 0:
+                sleep(0.1)
 
+            if package_found: # early exit
+                break
+
+            # Check right
             self.robot_movement.adjust_speed(BASE_L, 0)
+            while self.gyro_sensor.get_angle() < 70:
+                if self.color_sensor.get_current_color == "GREEN":
+                    package_found = True
+                    print("PACKAGE FOUUND")
+                    break
+            self.robot_movement.adjust_speed(-BASE_L, 0)
+            while self.gyro_sensor.get_angle() > 0:
+                sleep(0.1)
 
-            
+            # Advance
+            self.robot_movement.adjust_speed(BASE_L, BASE_R)
+            sleep(0.7)
+            self.robot_movement.adjust_speed(0, 0)
+
+
 
