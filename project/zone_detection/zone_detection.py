@@ -74,24 +74,18 @@ class ZoneDetection:
         self.movement.turn_specific_with_angle(180, -25, 30)
 
     def __move_around(self):
-        self.movement.set_limits(20)
-        sleep(0.5)
-        self.movement.turn_specific_with_angle(20, 0, 20)
-        sleep(0.1)
-        self.movement.turn_specific_with_angle(20, 20, 0)
-        sleep(0.1)
-
-        if self.has_found_red:
-            return
-
-        self.movement.turn_with_angle(-30)
-        sleep(0.5)
-
-        if self.has_found_red:
-            self.movement.turn_with_angle(30)
-            return
-
-        self.movement.turn_with_angle(60)
-        self.movement.turn_with_angle(-30)
+        self.movement.a_bit_forward()
+        # if self.has_found_red:
+        #     return
+        #
+        # self.movement.turn_with_angle(-30)
+        # sleep(0.5)
+        #
+        # if self.has_found_red:
+        #     self.movement.turn_with_angle(30)
+        #     return
+        #
+        # self.movement.turn_with_angle(60)
+        # self.movement.turn_with_angle(-30)
 
         self.stop = True

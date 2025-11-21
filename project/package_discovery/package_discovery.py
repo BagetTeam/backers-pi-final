@@ -49,7 +49,7 @@ class PackageDiscovery:
             self.robot_movement.adjust_speed(0, 0)
             sleep(0.5)
 
-            self.robot_movement.adjust_speed(20, 20)
+            self.robot_movement.adjust_speed(10, 10)
             sleep(0.5)
             self.robot_movement.adjust_speed(0, 0)
 
@@ -80,12 +80,12 @@ class PackageDiscovery:
         else:
             while self.gyro_sensor.get_angle() < 0:
                 sleep(0.01)
-        
+
         # cur_ref = self.gyro_sensor.get_reference()
-        # self.robot_movement.turn_specific_with_angle(20, 0, 20)        
+        # self.robot_movement.turn_specific_with_angle(20, 0, 20)
         # self.robot_movement.turn_specific_with_angle(20, 20, 0)
         # self.gyro_sensor.set_reference(cur_ref)
-        self.robot_movement.adjust_speed(20, 20)
+        self.robot_movement.adjust_speed(10, 10)
         sleep(0.4)
         self.robot_movement.adjust_speed(0, 0)
 
@@ -104,4 +104,3 @@ class PackageDiscovery:
         sleep(0.3)
         self.robot_movement.adjust_speed(0, 0)
         sleep(0.2)
-

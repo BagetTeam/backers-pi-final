@@ -95,3 +95,9 @@ class RobotMovement:
         return (self.left_motor.is_moving() or False) or (
             self.right_motor.is_moving() or False
         )
+
+    def a_bit_forward(self):
+        self.turn_specific_with_angle(20, 0, 20)
+        sleep(0.1)
+        self.turn_specific_with_angle(20, 20, 0)
+        sleep(0.1)
