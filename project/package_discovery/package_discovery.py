@@ -20,6 +20,7 @@ class PackageDiscovery:
         package_found = False
         advances = 0
         self.gyro_sensor.set_reference()
+        print("GOING IN")
         while not package_found and advances < 5:
             advances += 1
             print("Advance:", advances)
