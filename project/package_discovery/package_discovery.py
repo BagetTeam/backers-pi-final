@@ -22,13 +22,16 @@ class PackageDiscovery:
         self.gyro_sensor.set_reference()
         while not package_found and advances < 5:
             advances += 1
+            print("Advance:", advances)
             # Check left
+            print("Checking LEFT")
             self.robot_movement.adjust_speed(0, BASE_R)
             while self.gyro_sensor.get_angle() > -70:
                 if self.color_sensor.get_current_color == "GREEN":
                     package_found = True
                     print("PACKAGE FOUUND")
                     break
+            print("Turning back LEFT")
             self.robot_movement.adjust_speed(0, -BASE_R)
             while self.gyro_sensor.get_angle() < 0:
                 sleep(0.1)
@@ -36,6 +39,7 @@ class PackageDiscovery:
             if package_found: # early exit
                 break
 
+            print("Checking RIGHT")
             # Check right
             self.robot_movement.adjust_speed(BASE_L, 0)
             while self.gyro_sensor.get_angle() < 70:
@@ -43,6 +47,7 @@ class PackageDiscovery:
                     package_found = True
                     print("PACKAGE FOUUND")
                     break
+            print("Turning back RIGHT")
             self.robot_movement.adjust_speed(-BASE_L, 0)
             while self.gyro_sensor.get_angle() > 0:
                 sleep(0.1)
