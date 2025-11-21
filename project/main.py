@@ -23,6 +23,8 @@ MOTOR_RIGHT = Motor("D")
 MOTOR_DELIVERY = Motor("C")
 wait_ready_sensors(True)
 
+GYRO.set_mode("abs")
+
 COLOR_SENSOR = ColorSensor(COLOR)
 ROBOT_MOVEMENT = RobotMovement(MOTOR_LEFT, MOTOR_RIGHT)
 line_tracker = linetracker.LineTracker(ROBOT_MOVEMENT, COLOR_SENSOR, GYRO)

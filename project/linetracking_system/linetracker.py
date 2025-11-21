@@ -1,25 +1,29 @@
+from zone_detection.zone_detection import ZoneDetection
 from utils.brick import EV3GyroSensor, Motor
 from robot_movement.robot_movement import RobotMovement
 from color_sensor.color_sensor import ColorSensor
 from time import sleep
 
 
-class LineTracker():
+class LineTracker:
     color_sensor: ColorSensor
     robot_movement: RobotMovement
     gyro: EV3GyroSensor
     isLeft: bool
+    zone_detection: ZoneDetection
 
     def __init__(
         self,
         robot_movement: RobotMovement,
         color_sensor: ColorSensor,
         gyro: EV3GyroSensor,
+        zone_detection: ZoneDetection,
     ):
         self.robot_movement = robot_movement
         self.color_sensor = color_sensor
         self.isLeft = False
         self.gyro = gyro
+        self.zone_detection = zone_detection
 
     def follow_line3(
         self,
@@ -54,7 +58,9 @@ class LineTracker():
             if blackness < threshold:
                 # on white (ratio is low), slight left (turn towards the line)
                 # To turn left: Right motor > Left motor
-                self.robot_movement.adjust_speed(base_power, base_power + correction_factor)
+                self.robot_movement.adjust_speed(
+                    base_power, base_power + correction_factor
+                )
             if blackness >= threshold_black:
                 # a line is being crossed, we should turn 90 deg
                 self.robot_movement.intersection_turn_right(power=base_power)
@@ -71,17 +77,20 @@ class LineTracker():
         L_POWER = 10
 
         self.robot_movement.adjust_speed(L_POWER, R_POWER)
-        
+
         while True:
             rgb = self.color_sensor.get_current_rgb()
 
             ratio = self.get_ratio(rgb)
             print(ratio)
 
-            self.robot_movement.adjust_left_speed(L_POWER + (L_POWER / 2) * ratio / 0.20)
+            self.robot_movement.adjust_left_speed(
+                L_POWER + (L_POWER / 2) * ratio / 0.20
+            )
 
             if ratio > 0.8:
                 self.turn_right()
+                self.robot_movement.adjust_speed(L_POWER, R_POWER)
 
             sleep(0.01)
 
@@ -98,7 +107,5 @@ class LineTracker():
         return diff / dist_diff
 
     def turn_right(self):
-        self.robot_movement.adjust_speed(30, -5)
-        sleep(2)
-        self.robot_movement.adjust_speed(10, 20)
-        
+        self.robot_movement.intersection_turn_right()
+        self.zone_detection.detect_zone()
